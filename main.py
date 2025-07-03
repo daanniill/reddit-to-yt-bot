@@ -45,9 +45,12 @@ def make_shorts_video(video_path, title, output_filename=None):
     video = video.resized(height=1280)
     video = video.cropped(width=720, x_center=video.w/2)
 
+    # directing output folder
+    output_folder = "vids"
+    output_path = os.path.join(output_folder, output_filename)
+
     final = mp.CompositeVideoClip([video])
-    final.write_videofile(output_filename, fps=30)
-    return output_filename
+    final.write_videofile(output_path, fps=30)
 
 def main():
     print("[1] Searching for Reddit video...")
@@ -60,9 +63,10 @@ def main():
     download_video(url, "video.mp4")
 
     print("[3] Creating Shorts video...")
-    final_file = make_shorts_video("video.mp4", title)
+    make_shorts_video("video.mp4", title)
+    os.remove("video.mp4")
 
-    print("✅ Done! Output: short_final.mp4")
+    print("✅ Done! Output in vids")
 
 if __name__ == "__main__":
     main()
