@@ -16,6 +16,7 @@ def mark_uploaded(filename):
     with open(LOG_FILE, "a") as f:
         f.write(filename + "\n")
 
+
 def upload_next_vid():
     uploaded = load_uploaded()
     videos = [f for f in os.listdir(VIDEO_FOLDER) if f.endswith(".mp4") and f not in uploaded]
@@ -25,5 +26,14 @@ def upload_next_vid():
     
     video_file = videos[0]
     title = os.path.splitext(video_file)[0].replace("_", " ").capitalize()
-    upload_video()
+    upload_video(os.path.join(VIDEO_FOLDER, video_file), title=title)
     mark_uploaded(video_file)
+
+    schedule.every().day.at("10:00").do(upload_next_vid)
+    schedule.every().day.at("15:00").do(upload_next_vid)
+    schedule.every().day.at("20:00").do(upload_next_vid)
+
+print("Upload scheduler started...")
+while True:
+    schedule.run_pending()
+    time.sleep(30)

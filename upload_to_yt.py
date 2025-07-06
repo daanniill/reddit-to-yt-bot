@@ -22,7 +22,7 @@ def authenticate_youtube():
 
     return googleapiclient.discovery.build("youtube", "v3", credentials=credentials)
 
-def upload_video(file, title, description, tags=None, privacy="private"):
+def upload_video(file_path, title, description="#shorts", tags=None, privacy="private"):
     youtube = authenticate_youtube()
 
     request_body = {
@@ -38,7 +38,7 @@ def upload_video(file, title, description, tags=None, privacy="private"):
         }
     }
 
-    media = MediaFileUpload(file, mimetype="video/mp4", resumable=True)
+    media = MediaFileUpload(file_path, chunksize=-1, mimetype="video/*", resumable=True)
 
     request = youtube.videos().insert(
         part="snippet,status",
