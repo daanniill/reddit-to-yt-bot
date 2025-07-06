@@ -1,10 +1,15 @@
 import os
 import schedule
 import time
+import emoji
 from upload_to_yt import upload_video
 
 VIDEO_FOLDER = "vids"
 LOG_FILE = "log.txt"
+
+def format_title(title):
+    short_title = title.strip().capitalize()
+    return f"{short_title} 😂 #Shorts"
 
 def load_uploaded():
     if not os.path.exists(LOG_FILE):
@@ -16,7 +21,6 @@ def mark_uploaded(filename):
     with open(LOG_FILE, "a") as f:
         f.write(filename + "\n")
 
-
 def upload_next_vid():
     uploaded = load_uploaded()
     videos = [f for f in os.listdir(VIDEO_FOLDER) if f.endswith(".mp4") and f not in uploaded]
@@ -25,7 +29,7 @@ def upload_next_vid():
         return
     
     video_file = videos[0]
-    title = os.path.splitext(video_file)[0].replace("_", " ").capitalize()
+    title = format_title(os.path.splitext(video_file)[0].replace("_", " ").capitalize())
     upload_video(os.path.join(VIDEO_FOLDER, video_file), title=title)
     mark_uploaded(video_file)
 

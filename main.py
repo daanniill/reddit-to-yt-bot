@@ -8,7 +8,7 @@ import time
 
 load_dotenv()
 
-def get_reddit_posts(limit=5):
+def get_reddit_posts():
     reddit = praw.Reddit(
         client_id=os.getenv("CLIENT_ID"),
         client_secret=os.getenv("CLIENT_SECRET"),
@@ -19,9 +19,9 @@ def get_reddit_posts(limit=5):
     posts = []
 
     sub = reddit.subreddit("MemeVideos")
-    for post in sub.hot(limit):
+    for post in sub.hot(limit=5):
         if 'v.redd.it' in post.url:
-            return posts.append((post.title, post.url))
+            posts.append((post.title, post.url))
     return posts
 
 def download_video(url, filename='video.mp4'):
@@ -53,7 +53,7 @@ def make_shorts_video(video_path, output_filename=None):
 
 def main():
     print("[1] Fetching Reddit video posts...")
-    posts = get_reddit_posts(limit=5)
+    posts = get_reddit_posts()
     if not posts:
         print("❌ No videos found.")
         return
@@ -72,7 +72,6 @@ def main():
             print(f"⚠️ Failed to process '{title}': {e}")
         time.sleep(2)  # delay to avoid hammering Reddit
 
-    
 
 
 if __name__ == "__main__":
