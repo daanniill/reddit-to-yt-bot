@@ -2,3 +2,6 @@
 vids
 client_secrets.json
 token.pickle
+__pycache__
+log.txt
+processed_ids.txt
