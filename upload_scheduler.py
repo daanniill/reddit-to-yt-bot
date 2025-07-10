@@ -38,12 +38,12 @@ def upload_next_vid():
     upload_video(os.path.join(VIDEO_FOLDER, video_file), title=title)
     mark_uploaded(video_file)
 
-#schedule.every().day.at("10:00").do(upload_next_vid)
-#schedule.every().day.at("15:00").do(upload_next_vid)
-#chedule.every().day.at("20:00").do(upload_next_vid)
+schedule.every().day.at("10:00").do(upload_next_vid)
+schedule.every().day.at("15:00").do(upload_next_vid)
+schedule.every().day.at("20:00").do(upload_next_vid)
 
 print("Upload scheduler started...")
 upload_next_vid()
-#while True:
-    #schedule.run_pending()
-    #time.sleep(30)
+while True:
+    schedule.run_pending()
+    time.sleep(30)

@@ -4,6 +4,7 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from googleapiclient.http import MediaFileUpload
 import pickle
+from google.auth.transport.requests import Request
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
@@ -14,9 +15,12 @@ def authenticate_youtube():
             credentials = pickle.load(token)
 
     if not credentials or not credentials.valid:
-        flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-            "client_secrets.json", SCOPES)
-        credentials = flow.run_local_server(port=0)
+        if credentials and credentials.expired and credentials.refresh_token:
+            credentials.refresh(Request())
+        else:
+            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                "client_secrets.json", SCOPES)
+            credentials = flow.run_local_server(port=0)
         with open("token.pickle", "wb") as token:
             pickle.dump(credentials, token)
 

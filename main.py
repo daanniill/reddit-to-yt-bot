@@ -61,6 +61,10 @@ def make_shorts_video(video_path, output_filename=None):
 
     # directing output folder
     output_folder = "vids"
+    isExist = os.path.exists(output_folder)
+    if not isExist:
+        os.makedirs(output_folder)
+
     output_path = os.path.join(output_folder, output_filename)
 
     final = mp.CompositeVideoClip([video])
